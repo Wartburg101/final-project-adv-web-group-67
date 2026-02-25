@@ -9,7 +9,7 @@
   </head>
   <body>
     <header>
-      <nav>
+      <nav class="main-nav">
         <div class="jkpg-logo-nav-container">
           <svg viewBox="0 0 388 91" xmlns="http://www.w3.org/2000/svg" class="jkpg-logo" fill="white">
             <path
@@ -39,7 +39,19 @@
         <h1>VENUES.</h1>
         <h3>I Jkpg City hittar du både butiker och affärer som erbjuder allt från loppis och second hand, till blommor, skor, kläder och inredning.</h3>
       </section>
-      <section class="venue-section"></section>
+      <section class="venue-section">
+        <nav class="optionsNav">
+          <div class="sortContainer">
+            <h2>Sort by:</h2>
+            <button id="sortButtonAlphabet">Alphabetical</button>
+            <button id="sortButtonArea">Rating</button>
+          </div>
+          <button class="addButton">
+            <p>Add</p>
+            <img src="./assets/images/Add.svg" alt="" srcset="" />
+          </button>
+        </nav>
+      </section>
     </main>
   </body>
 </html>

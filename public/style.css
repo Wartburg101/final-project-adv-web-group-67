@@ -14,7 +14,7 @@
   font-family: "Acumin Pro Regular", sans-serif;
 }
 
-nav {
+.manin-nav {
   width: 100%;
   background-color: #222222;
   display: flex;
@@ -58,6 +58,7 @@ main {
   width: 100%;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
 }
 
 .title-section {
@@ -82,4 +83,40 @@ h3 {
   width: 40%;
   font-weight: 300;
   letter-spacing: 0.3px;
+}
+
+.optionsNav {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem 8%;
+}
+.sortContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.addButton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: auto; /* Let height be determined by content */
+  background: none;
+  border: none;
+}
+.addButton p {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #000000;
+  height: 2rem; /* Remove fixed height */
+}
+.addButton img {
+  height: 1rem; /* Match text size for better alignment */
+  width: auto;
+  margin-right: 0.5rem;
 }
