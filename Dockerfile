@@ -1,4 +1,6 @@
-FROM nginx:latest
+FROM node:20-alpine
+
+WORKDIR /usr/src/app
 
 COPY index.html /usr/share/nginx/html/
 COPY nginx.conf /etc/nginx/nginx.conf
