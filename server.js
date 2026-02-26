@@ -1,4 +1,5 @@
-const app = require("express")();
+const express = require("express");
+const app = express();
 const { Client } = require("pg");
 const port = 3000;
 
@@ -10,7 +11,19 @@ const client = new Client({
   database: "postgres",
 });
 
-app.use("/", require("express").static("public"));
+app.use(express.static("public"));
+app.use(express.json());
+
+// Simple demo login (hard-coded credentials)
+app.post('/login', (req, res) => {
+  const { username, password } = req.body || {};
+  // demo credentials
+  const DEMO_USER = { username: 'admin', password: 'admin' };
+  if (username === DEMO_USER.username && password === DEMO_USER.password) {
+    return res.json({ success: true, user: { username } });
+  }
+  return res.status(401).json({ success: false, error: 'Invalid credentials' });
+});
 
 app.get("/stores", async (req, res) => {
   try {
