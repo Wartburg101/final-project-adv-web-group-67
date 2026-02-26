@@ -326,6 +326,8 @@ h2 {
   flex-direction: row;
   justify-content: space-between;
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 .venueInfoContainer {
   display: flex;
@@ -338,6 +340,15 @@ h2 {
   font-family: "Acumin Pro Regular", sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
+  text-decoration: none;
+  color: #000000;
+}
+.venueArea {
+  font-family: "Acumin Pro Regular", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 300;
+  text-decoration: none;
+  color: #000000;
 }
 .venueButtonContainer {
   display: flex;
