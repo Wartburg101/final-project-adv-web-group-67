@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (resp.ok && data.success) {
         localStorage.setItem('user', JSON.stringify(data.user));
         toggleLoginButton();
+        toggleAdminFunctionality();
         refreshNav();
       } else {
         alert('Login failed: ' + (data.error || 'Invalid credentials'));
@@ -57,11 +58,24 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+function toggleAdminFunctionality(){
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user) {
+    addButton.style.display = 'flex';
+  } else {
+    addButton.style.display = 'none';
+  }
+}
+
   function refreshNav() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       signInNavButton.textContent = 'Sign Out';
-      signInNavButton.onclick = () => { localStorage.removeItem('user'); refreshNav(); };
+      signInNavButton.onclick = () => { 
+        localStorage.removeItem('user'); 
+        refreshNav();
+        toggleAdminFunctionality();
+      };
     } else {
       signInNavButton.textContent = 'Sign In';
       signInNavButton.onclick = () => toggleLoginButton();
@@ -70,5 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (loginButton) loginButton.addEventListener('click', attemptLogin);
   refreshNav();
+  toggleAdminFunctionality();
 });
 
