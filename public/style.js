@@ -168,4 +168,48 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
+
+  try {
+    const res = await fetch("/stores"); // hämtar från server.js
+    if (!res.ok) throw new Error("Kunde inte hämta /stores");
+
+    const stores = await res.json();
+
+    list.innerHTML = stores
+      .map((store) => {
+        // DB/JSON
+        const title = store.name ?? "Okänt företag";
+        const area = store.district ?? "";
+        const url = fixUrl(store.url);
+
+        return `
+        <a href="${escapeHtml(url)}" class="venueItem" data-id="${store.id ?? ""}" target="_blank">
+          <div class="venueInfoContainer">
+            <p class="venueTitle">${escapeHtml(title)}</p>
+            <p class="venueArea">${escapeHtml(area)}</p>
+          </div>
+          <div class="venueButtonContainer">
+            <img src="./assets/images/arrow_right_alt.svg" alt="Öppna" />
+          </div>
+        </a>
+      `;
+      })
+      .join("");
+  } catch (err) {
+    console.error(err);
+    list.innerHTML = `<p>Kunde inte ladda venues.</p>`;
+  }
+}
+
+// Liten helper
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+>>>>>>> 4b0ca525b024a2df4b346c43a945fa4030d24a9b
 loadVenues();
