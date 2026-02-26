@@ -18,8 +18,8 @@ app.use(express.json());
 app.post('/login', (req, res) => {
   const { username, password } = req.body || {};
   // demo credentials
-  const DEMO_USER = { username: 'admin', password: 'admin' };
-  if (username === DEMO_USER.username && password === DEMO_USER.password) {
+  const ADMIN_USER = { username: 'admin', password: 'admin' };
+  if (username === ADMIN_USER.username && password === ADMIN_USER.password) {
     return res.json({ success: true, user: { username } });
   }
   return res.status(401).json({ success: false, error: 'Invalid credentials' });
