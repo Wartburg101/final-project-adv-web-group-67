@@ -22,6 +22,7 @@ function toggleLoginButton() {
   } else {
     loginScreen.classList.add("activeLogin");
   }
+<<<<<<< HEAD
 
 let adminScreen = document.getElementById("admin-edit-screen");
 let crossDownAdminButton = document.getElementById("crossDownAdminButton");
