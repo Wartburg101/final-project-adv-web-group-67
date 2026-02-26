@@ -113,12 +113,21 @@ h3 {
   letter-spacing: 0.3px;
 }
 
+.venue-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
 .optionsNav {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 1rem 8%;
+  padding: 0 8%;
 }
 .sortContainer {
   display: flex;
@@ -139,19 +148,39 @@ h2 {
   font-size: 1rem;
   cursor: pointer;
   opacity: 0.6;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease-in;
+  position: relative;
 }
-
 .active {
   opacity: 1 !important;
 }
-.active::after {
+.sortContainer button:hover {
+  opacity: 1 !important;
+}
+
+.sortContainer button::after {
   content: "";
   display: block;
+  position: absolute;
+  left: 10%;
+  bottom: -0.4rem;
   width: 80%;
-  height: 2px;
-  background-color: #000000;
-  margin-top: 0.2rem;
+  height: 3px;
+  background: #000000;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.sortContainer button.active::after,
+.sortContainer .active::after {
+  transform: scaleX(1);
 }
 
 .addButton {
@@ -160,19 +189,66 @@ h2 {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  height: auto; /* Let height be determined by content */
+  height: auto;
   background: none;
   border: none;
+  cursor: pointer;
 }
 .addButton p {
   display: flex;
   align-items: center;
   font-size: 1rem;
   color: #000000;
-  height: 2rem; /* Remove fixed height */
+  height: 2rem;
 }
 .addButton img {
-  height: 1rem; /* Match text size for better alignment */
+  height: 1rem;
   width: auto;
   margin-right: 0.5rem;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.addButton:hover img {
+  transform: rotate(90deg);
+}
+.line {
+  width: 84%;
+  height: 1px;
+  background-color: #000000;
+}
+
+.venueList {
+  width: 84%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+.venueItem {
+  background-color: rgb(220, 208, 186);
+  width: 100%;
+  min-height: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.venueInfoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+}
+.venueTitle {
+  font-family: "Acumin Pro Regular", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.venueButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.venueButtonContainer img {
+  width: 2rem;
 }
