@@ -10,13 +10,23 @@
   <body>
     <section id="login-screen" >
         <div class="login-container">
-          <a href="#" id="crossDownLogInButton" onclick="toggleLoginButton(); return false;"><svg fill="#ffffff" width="2rem"  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M0 14.545L1.455 16 8 9.455 14.545 16 16 14.545 9.455 8 16 1.455 14.545 0 8 6.545 1.455 0 0 1.455 6.545 8z" fill-rule="evenodd"></path> </g></svg></a>
+          <div class="login-container-header"><a href="#" id="crossDownLogInButton" onclick="toggleLoginButton(); return false;"><svg fill="#ffffff" width="2rem"  viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M0 14.545L1.455 16 8 9.455 14.545 16 16 14.545 9.455 8 16 1.455 14.545 0 8 6.545 1.455 0 0 1.455 6.545 8z" fill-rule="evenodd"></path> </g></svg></a></div>
+          <div class="login-container-body">
+          <div class="login-container-left">
           <h1>Welcome to JPKG City Venues</h1>
+
+          </div>
+          <div class="login-container-right">
           <form action="">
-            <input type="text" placeholder="Username" id="username" />
-            <input type="password" placeholder="Password" id="password" />
+            <label for="username">Username</label>
+            <input type="text" placeholder="Enter your username" id="username"/>
+             <label for="password">Password</label>
+            <input type="password" placeholder="Enter your password" id="password" />
+            <button id="login-button">Login</button>
           </form>
-          <button id="login-button">Login</button>
+          
+          </div>
+          </div>
         </div>
     </section>
     <header>

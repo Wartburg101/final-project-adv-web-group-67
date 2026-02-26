@@ -16,13 +16,83 @@
 
 .login-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  flex-direction: column;
   background-color: #222222;
   padding: 2rem;
   border-radius: 8px;
+  width: 50rem;
+  height:20rem;
+}
+
+.login-container-header{
+  right: 0;
+  width:100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.login-container-body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width:100%;
+  height:100%;
+}
+
+.login-container-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width:50%;
+}
+
+.login-container-right{
+  display: flex;
+  flex-direction: column;
+  width:50%;
+  height:100%;
+  color:white;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+
+
+.login-container-right form{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-right:2rem;
+  padding-left: 2rem;
+}
+
+.login-container-right form button{
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-family: "Acumin Pro Regular", sans-serif;
+}
+
+.login-container-right form input{
+  height:2.5rem;
+  font-size: 10pt;
+  background-color: #222222;
+  border-bottom: white solid 1px;
+  border-right: 0;
+}
+
+
+
+.login-container-left h1 {
+  right:0;
+  text-align: right;
+  font-weight: 700;
+  font-size: 40pt;
+
 }
 
 #login-screen {
@@ -55,6 +125,7 @@
   width: 11rem;
   padding: 0.5rem;
 } 
+
 
 .jpkg-logo {
   width: 100%;
