@@ -307,7 +307,7 @@ h2 {
   transform: scaleX(1);
 }
 
-#addButton {
+.addButton {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -318,20 +318,20 @@ h2 {
   border: none;
   cursor: pointer;
 }
-#addButton p {
+.addButton p {
   display: flex;
   align-items: center;
   font-size: 1rem;
   color: #000000;
   height: 2rem;
 }
-#addButton img {
+.addButton img {
   height: 1rem;
   width: auto;
   margin-right: 0.5rem;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-#addButton:hover img {
+.addButton:hover img {
   transform: rotate(90deg);
 }
 .line {

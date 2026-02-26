@@ -22,7 +22,6 @@ function toggleLoginButton() {
   } else {
     loginScreen.classList.add("activeLogin");
   }
-<<<<<<< HEAD
 
 let adminScreen = document.getElementById("admin-edit-screen");
 let crossDownAdminButton = document.getElementById("crossDownAdminButton");
@@ -73,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (resp.ok && data.success) {
         localStorage.setItem('user', JSON.stringify(data.user));
         toggleLoginButton();
-        toggleAdminFunctionality();
         refreshNav();
       } else {
         alert('Login failed: ' + (data.error || 'Invalid credentials'));
@@ -91,18 +89,14 @@ function toggleAdminFunctionality(){
     addButton.style.display = 'flex';
   } else {
     addButton.style.display = 'none';
-}
-}
+    }
+  }
 
   function refreshNav() {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       signInNavButton.textContent = 'Sign Out';
-      signInNavButton.onclick = () => { 
-        localStorage.removeItem('user'); 
-        refreshNav();
-        toggleAdminFunctionality();
-      };
+      signInNavButton.onclick = () => { localStorage.removeItem('user'); refreshNav(); };
     } else {
       signInNavButton.textContent = 'Sign In';
       signInNavButton.onclick = () => toggleLoginButton();
@@ -214,3 +208,5 @@ function escapeHtml(str) {
 
 >>>>>>> 4b0ca525b024a2df4b346c43a945fa4030d24a9b
 loadVenues();
+});
+
