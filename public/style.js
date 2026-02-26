@@ -14,8 +14,6 @@ let signInNavButton = document.getElementById("signInNavButton");
 let crossDownLogInButton = document.getElementById("crossDownLogInButton");
 let loginScreen = document.getElementById("login-screen");
 
-function toggleLoginButton(){
-  
 /*LOGIN FUNCTIONALITY*/ 
 
 function toggleLoginButton() {
