@@ -14,6 +14,8 @@ let signInNavButton = document.getElementById("signInNavButton");
 let crossDownLogInButton = document.getElementById("crossDownLogInButton");
 let loginScreen = document.getElementById("login-screen");
 
+/*LOGIN FUNCTIONALITY*/
+
 function toggleLoginButton() {
   if (loginScreen.classList.contains("activeLogin")) {
     loginScreen.classList.remove("activeLogin");
@@ -22,7 +24,11 @@ function toggleLoginButton() {
   }
 }
 
-/*LOGIN FUNCTIONALITY*/
+
+let adminScreen = document.getElementById("admin-edit-screen");
+let crossDownAdminButton = document.getElementById("crossDownAdminButton");
+let openAdminScreenButton = document.getElementById("addButton");
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const loginButton = document.getElementById("login-button");
@@ -47,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleLoginButton();
         toggleAdminFunctionality();
         refreshNav();
+        
       } else {
         alert("Login failed: " + (data.error || "Invalid credentials"));
       }
@@ -65,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+
   function refreshNav() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
@@ -74,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
         refreshNav();
         toggleAdminFunctionality();
       };
+
     } else {
       signInNavButton.textContent = "Sign In";
       signInNavButton.onclick = () => toggleLoginButton();
@@ -83,7 +92,17 @@ document.addEventListener("DOMContentLoaded", () => {
   if (loginButton) loginButton.addEventListener("click", attemptLogin);
   refreshNav();
   toggleAdminFunctionality();
+  
 });
+
+function toggleAdminScreen() {
+  // ensure we use the same class as defined in CSS
+  if (adminScreen.classList.contains("activeAdmin")) {
+    adminScreen.classList.remove("activeAdmin");
+  } else {
+    adminScreen.classList.add("activeAdmin");
+  }
+}
 
 function fixUrl(url) {
   if (!url) return "";

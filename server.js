@@ -1,9 +1,11 @@
 const express = require("express");
 const app = express();
-const { Client } = require("pg");
+const { Pool } = require("pg");
 const port = 3000;
 
-const client = new Client({
+// Use a connection pool rather than a single client instance. The pool
+// manages multiple connections and lets us reuse them across requests.
+const pool = new Pool({
   password: "12345",
   user: "postgres",
   host: "localhost",
@@ -27,15 +29,13 @@ app.post('/login', (req, res) => {
 
 app.get("/stores", async (req, res) => {
   try {
-    await client.connect();
-    const result = await client.query("SELECT * FROM stores");
-    res.json(result.rows);
+    // Acquire a client from the pool and run the query
+    const { rows } = await pool.query("SELECT * FROM stores");
+    res.json(rows);
     console.log("Stores fetched successfully");
   } catch (err) {
     console.error("Error fetching stores:", err);
     res.status(500).json({ error: "Internal Server Error" });
-  } finally {
-    await client.end();
   }
 });
 
