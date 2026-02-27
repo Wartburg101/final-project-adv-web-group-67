@@ -60,21 +60,30 @@
         <h1>VENUES.</h1>
         <h3>I Jkpg City hittar du både butiker och affärer som erbjuder allt från loppis och second hand, till blommor, skor, kläder och inredning.</h3>
       </section>
-      <section class="venue-section">
+       <section class="venue-section">
         <nav class="optionsNav">
           <div class="sortContainer">
             <h2>Sort by:</h2>
-            <button id="sortButtonAlphabet" class="active" onclick="toggleAlphabetButton()">Alphabet</button>
-            <button id="sortButtonArea" onclick="toggleAreaButton()">Area</button>
+            <button
+              id="sortButtonAlphabet"
+              class="active"
+              onclick="toggleAlphabetButton()"
+            >
+              Alphabet
+            </button>
+            <button id="sortButtonArea" onclick="toggleAreaButton()">
+              Area
+            </button>
           </div>
-          <button id="addButton"">
+          <button class="addButton">
             <p>Add</p>
             <img src="./assets/images/Add.svg" alt="" srcset="" />
           </button>
         </nav>
         <div class="line"></div>
-        <section class="venueList">
-          <div class="venueItem">
+        <section class="venueList" id="venueList"></section>
+        <!--<section class="venueList">-->
+          <!--<div class="venueItem">
             <div class="venueInfoContainer">
               <p class="venueTitle">Apotek</p>
               <p class="venueArea">Jönköping Väster</p>
@@ -99,7 +108,7 @@
             </div>
             <div class="venueButtonContainer">
               <img src="./assets/images/arrow_right_alt.svg" alt="" />
-            </div>
+            </div>-->
           </div>
         </section>
       </section>
