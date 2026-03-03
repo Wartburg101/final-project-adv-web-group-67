@@ -17,15 +17,30 @@ const pool = new Pool({
 app.use(express.static("public"));
 app.use(express.json());
 
+let highestId = 0;
+
 // Simple demo login (hard-coded credentials)
-app.post('/login', (req, res) => {
+app.post("/login", (req, res) => {
   const { username, password } = req.body || {};
   // demo credentials
-  const ADMIN_USER = { username: 'admin', password: 'admin' };
+  const ADMIN_USER = { username: "admin", password: "admin" };
   if (username === ADMIN_USER.username && password === ADMIN_USER.password) {
     return res.json({ success: true, user: { username } });
   }
-  return res.status(401).json({ success: false, error: 'Invalid credentials' });
+  return res.status(401).json({ success: false, error: "Invalid credentials" });
+});
+
+app.post("/venues", async (req, res) => {
+  const { name, district, url } = req.body || {};
+  highestId++;
+  const id = highestId;
+  try {
+    const { rows } = await pool.query("INSERT INTO stores (id, name, district, url) VALUES ($1, $2, $3, $4) RETURNING *", [id, name, district, url]);
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("Error adding venue:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 app.get("/stores", async (req, res) => {
@@ -33,6 +48,7 @@ app.get("/stores", async (req, res) => {
     // Acquire a client from the pool and run the query
     const { rows } = await pool.query("SELECT * FROM stores");
     res.json(rows);
+    highestId = rows.reduce((max, store) => Math.max(max, store.id), 0);
     console.log("Stores fetched successfully");
   } catch (err) {
     console.error("Error fetching stores:", err);

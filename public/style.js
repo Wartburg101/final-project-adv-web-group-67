@@ -24,11 +24,9 @@ function toggleLoginButton() {
   }
 }
 
-
 let adminScreen = document.getElementById("admin-edit-screen");
 let crossDownAdminButton = document.getElementById("crossDownAdminButton");
 let openAdminScreenButton = document.getElementById("addButton");
-
 
 document.addEventListener("DOMContentLoaded", () => {
   const loginButton = document.getElementById("login-button");
@@ -53,7 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleLoginButton();
         toggleAdminFunctionality();
         refreshNav();
-        
       } else {
         alert("Login failed: " + (data.error || "Invalid credentials"));
       }
@@ -72,7 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-
   function refreshNav() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
@@ -82,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
         refreshNav();
         toggleAdminFunctionality();
       };
-
     } else {
       signInNavButton.textContent = "Sign In";
       signInNavButton.onclick = () => toggleLoginButton();
@@ -92,7 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (loginButton) loginButton.addEventListener("click", attemptLogin);
   refreshNav();
   toggleAdminFunctionality();
-  
 });
 
 function toggleAdminScreen() {
@@ -149,12 +143,39 @@ async function loadVenues() {
 
 // Liten helper
 function escapeHtml(str) {
-  return String(str)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+  return String(str).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 }
 
 loadVenues();
+
+function addNewVenue() {
+  const name = document.getElementById("venueName").value;
+  const district = document.getElementById("venueArea").value;
+  const url = document.getElementById("venueUrl").value;
+
+  try {
+    fetch("/venues", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, district, url }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Kunde inte lägga till venue");
+        return res.json();
+      })
+      .then((data) => {
+        alert("Venue tillagd!");
+        loadVenues();
+        name.value = "";
+        district.value = "";
+        url.value = "";
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Kunde inte lägga till venue");
+      });
+  } catch (err) {
+    console.error(err);
+    alert("Kunde inte lägga till venue");
+  }
+}

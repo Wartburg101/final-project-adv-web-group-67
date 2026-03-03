@@ -15,14 +15,14 @@
           </div>
           <div class="admin-edit-container-body">
             <h1>Add Venue</h1>
-            <form action="">
+            <form onsubmit="addNewVenue()" action="" >
               <label for="venueName">Venue Title</label>
               <input type="text" placeholder="Enter venue name" id="venueName"/>
               <label for="venueArea">Venue Area</label>
               <input type="text" placeholder="Enter venue area" id="venueArea"/>
               <label for="venueUrl">Venue URL</label> 
               <input type="text" placeholder="Enter venue URL" id ="venueUrl"/>
-              <button id="addVenueButton">Add Venue</button>
+              <button type="submit" id="addVenueButton">Add Venue</button>
             </form>
           </div>
       </div>
