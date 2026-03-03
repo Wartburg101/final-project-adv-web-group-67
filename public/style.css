@@ -351,12 +351,6 @@ h2 {
   background-color: #000000;
 }
 
-.venueList {
-  width: 84%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-}
 .venueItem {
   background-color: rgb(220, 208, 186);
   width: 100%;
@@ -390,4 +384,37 @@ h2 {
 }
 .venueButtonContainer img {
   width: 2rem;
+}
+
+.letter-section {
+  margin-top: 18px;
+}
+
+.letter-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+.letter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(240px, 1fr));
+  gap: 18px 22px;
+}
+
+#venueList {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 84%;
+}
+
+.letter-section {
+  width: 100%;
+}
+
+.letter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(240px, 1fr));
+  gap: 18px 22px;
 }

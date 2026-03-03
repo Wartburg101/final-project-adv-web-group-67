@@ -4,6 +4,7 @@ let sortButtonArea = document.getElementById("sortButtonArea");
 function toggleAlphabetButton() {
   sortButtonAlphabet.classList.add("active");
   sortButtonArea.classList.remove("active");
+  loadVenues(); // Ladda om venues i alfabetisk ordning
 }
 function toggleAreaButton() {
   sortButtonArea.classList.add("active");
@@ -106,6 +107,84 @@ function fixUrl(url) {
   return "https://" + s;
 }
 
+// update, sort by letters
+
+function firstLetter(name) {
+  const s = (name || "").trim();
+  return s ? s[0].toUpperCase() : "#";
+}
+
+function isAlphabetMode() {
+  return sortButtonAlphabet?.classList.contains("active");
+}
+
+function sortStores(stores) {
+  // Om Area är aktiv -> sortera på district, annars på name
+  if (!isAlphabetMode()) {
+    return [...stores].sort((a, b) =>
+      (a.district || "").localeCompare(b.district || "", "sv", {
+        sensitivity: "base",
+      }),
+    );
+  }
+
+  return [...stores].sort((a, b) =>
+    (a.name || "").localeCompare(b.name || "", "sv", { sensitivity: "base" }),
+  );
+}
+
+function renderStoresGrouped(stores) {
+  const list = document.getElementById("venueList");
+  list.innerHTML = "";
+
+  const sorted = sortStores(stores);
+
+  const groups = new Map();
+  for (const store of sorted) {
+    const letter = firstLetter(store.name);
+    if (!groups.has(letter)) groups.set(letter, []);
+    groups.get(letter).push(store);
+  }
+
+  const letters = Array.from(groups.keys()).sort((a, b) =>
+    a.localeCompare(b, "sv", { sensitivity: "base" }),
+  );
+
+  list.innerHTML = letters
+    .map((letter) => {
+      const itemsHtml = groups
+        .get(letter)
+        .map((store) => {
+          const title = store.name ?? "Okänt företag";
+          const area = store.district ?? "";
+          const url = fixUrl(store.url);
+
+          return `
+            <a href="${escapeHtml(url)}" class="venueItem" data-id="${store.id ?? ""}" target="_blank">
+              <div class="venueInfoContainer">
+                <p class="venueTitle">${escapeHtml(title)}</p>
+                <p class="venueArea">${escapeHtml(area)}</p>
+              </div>
+              <div class="venueButtonContainer">
+                <img src="./assets/images/arrow_right_alt.svg" alt="Öppna" />
+              </div>
+            </a>
+          `;
+        })
+        .join("");
+
+      return `
+        <section class="letter-section">  
+          <h2 class="letter-title">${escapeHtml(letter)}</h2> 
+          <div class="letter-grid"> 
+            ${itemsHtml}
+          </div>
+        </section>
+      `;
+    })
+    .join("");
+}
+
 async function loadVenues() {
   const list = document.getElementById("venueList");
 
@@ -115,32 +194,12 @@ async function loadVenues() {
 
     const stores = await res.json();
 
-    list.innerHTML = stores
-      .map((store) => {
-        // DB/JSON
-        const title = store.name ?? "Okänt företag";
-        const area = store.district ?? "";
-        const url = fixUrl(store.url);
-
-        return `
-        <a href="${escapeHtml(url)}" class="venueItem" data-id="${store.id ?? ""}" target="_blank">
-          <div class="venueInfoContainer">
-            <p class="venueTitle">${escapeHtml(title)}</p>
-            <p class="venueArea">${escapeHtml(area)}</p>
-          </div>
-          <div class="venueButtonContainer">
-            <img src="./assets/images/arrow_right_alt.svg" alt="Öppna" />
-          </div>
-        </a>
-      `;
-      })
-      .join("");
+    renderStoresGrouped(stores);
   } catch (err) {
     console.error(err);
     list.innerHTML = `<p>Kunde inte ladda venues.</p>`;
   }
 }
-
 // Liten helper
 function escapeHtml(str) {
   return String(str).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
