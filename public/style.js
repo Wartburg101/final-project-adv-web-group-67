@@ -66,8 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       addButton.style.display = "flex";
+      editStores();
     } else {
       addButton.style.display = "none";
+      editStores();
     }
   }
 
@@ -90,6 +92,44 @@ document.addEventListener("DOMContentLoaded", () => {
   refreshNav();
   toggleAdminFunctionality();
 });
+
+function editStores() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  let venueItems = document.querySelectorAll(".venueItem");
+  
+  venueItems.forEach((item) => {
+    const existingButton = item.querySelector(".venueEditButton");
+    
+    if (user) {
+      // User is logged in as admin - add button if it doesn't exist
+      if (!existingButton) {
+        const editButton = document.createElement("button");
+        editButton.className = "venueEditButton";
+        editButton.textContent = "Edit";
+        editButton.onclick = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleEditScreen(item.dataset.id);
+          // Functionality to be added later
+        };
+        
+        item.appendChild(editButton);
+      }
+    } else {
+      // User is not logged in - remove button if it exists
+      if (existingButton) {
+        existingButton.remove();
+      }
+    }
+  });
+}
+
+function toggleEditScreen(storeId) {
+  // For now, just alert the store ID. In a real implementation, this would open an edit form.
+  alert("Edit store with ID: " + storeId);
+  
+
+}
 
 function toggleAdminScreen() {
   // ensure we use the same class as defined in CSS
@@ -203,14 +243,15 @@ function renderStoresGrouped(stores) {
 
 async function loadVenues() {
   const list = document.getElementById("venueList");
+  const user = JSON.parse(localStorage.getItem("user"));
 
   try {
     const res = await fetch("/stores"); // hämtar från server.js
     if (!res.ok) throw new Error("Kunde inte hämta /stores");
-
     const stores = await res.json();
-
     renderStoresGrouped(stores);
+    editStores();
+    
   } catch (err) {
     console.error(err);
     list.innerHTML = `<p>Kunde inte ladda venues.</p>`;
