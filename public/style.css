@@ -418,3 +418,11 @@ h2 {
   grid-template-columns: repeat(3, minmax(240px, 1fr));
   gap: 18px 22px;
 }
+#venueList {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.letter-section {
+  width: 100%;
+}

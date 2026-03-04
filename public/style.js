@@ -4,11 +4,12 @@ let sortButtonArea = document.getElementById("sortButtonArea");
 function toggleAlphabetButton() {
   sortButtonAlphabet.classList.add("active");
   sortButtonArea.classList.remove("active");
-  loadVenues(); // Ladda om venues i alfabetisk ordning
+  loadVenues(); // stores alphabetically
 }
 function toggleAreaButton() {
   sortButtonArea.classList.add("active");
   sortButtonAlphabet.classList.remove("active");
+  loadVenues(); // Area, sort by district
 }
 
 let signInNavButton = document.getElementById("signInNavButton");
@@ -118,14 +119,23 @@ function isAlphabetMode() {
   return sortButtonAlphabet?.classList.contains("active");
 }
 
+function areaKey(district) {
+  const s = (district || "").trim();
+  return s ? s : "N/A";
+}
+
 function sortStores(stores) {
   // Om Area är aktiv -> sortera på district, annars på name
   if (!isAlphabetMode()) {
-    return [...stores].sort((a, b) =>
-      (a.district || "").localeCompare(b.district || "", "sv", {
+    return [...stores].sort((a, b) => {
+      const d = (a.district || "").localeCompare(b.district || "", "sv", {
         sensitivity: "base",
-      }),
-    );
+      });
+      if (d !== 0) return d;
+      return (a.name || "").localeCompare(b.name || "", "sv", {
+        sensitivity: "base",
+      });
+    });
   }
 
   return [...stores].sort((a, b) =>
@@ -140,20 +150,26 @@ function renderStoresGrouped(stores) {
   const sorted = sortStores(stores);
 
   const groups = new Map();
+
   for (const store of sorted) {
-    const letter = firstLetter(store.name);
-    if (!groups.has(letter)) groups.set(letter, []);
-    groups.get(letter).push(store);
+    const key = isAlphabetMode()
+      ? firstLetter(store.name)
+      : areaKey(store.district);
+
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(store);
   }
+  // Sort Unknown Area last, otherwise alphabetically
+  const keys = Array.from(groups.keys()).sort((a, b) => {
+    if (a === "N/A") return 1;
+    if (b === "N/A") return -1;
+    return a.localeCompare(b, "sv", { sensitivity: "base" });
+  });
 
-  const letters = Array.from(groups.keys()).sort((a, b) =>
-    a.localeCompare(b, "sv", { sensitivity: "base" }),
-  );
-
-  list.innerHTML = letters
-    .map((letter) => {
+  list.innerHTML = keys
+    .map((key) => {
       const itemsHtml = groups
-        .get(letter)
+        .get(key)
         .map((store) => {
           const title = store.name ?? "Okänt företag";
           const area = store.district ?? "";
@@ -175,7 +191,7 @@ function renderStoresGrouped(stores) {
 
       return `
         <section class="letter-section">  
-          <h2 class="letter-title">${escapeHtml(letter)}</h2> 
+          <h2 class="letter-title">${escapeHtml(key)}</h2>
           <div class="letter-grid"> 
             ${itemsHtml}
           </div>
@@ -202,7 +218,12 @@ async function loadVenues() {
 }
 // Liten helper
 function escapeHtml(str) {
-  return String(str).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
 loadVenues();
