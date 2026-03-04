@@ -56,6 +56,17 @@ app.get("/stores", async (req, res) => {
   }
 });
 
+app.post("/edit-venue", async (req, res) => {
+  const { id, name, district, url } = req.body || {};
+  try {
+    const { rows } = await pool.query("UPDATE stores SET name = $1, district = $2, url = $3 WHERE id = $4 RETURNING *", [name, district, url, id]);
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("Error editing venue:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

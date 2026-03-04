@@ -136,9 +136,9 @@ function toggleEditScreen(storeId, store = null) {
   } else {
     if (store) {
       // Populate form fields with venue data
-      document.getElementById("venueName").value = store.name || "";
-      document.getElementById("venueArea").value = store.district || "";
-      document.getElementById("venueUrl").value = store.url || "";
+      document.getElementById("editVenueName").value = store.name || "";
+      document.getElementById("editVenueArea").value = store.district || "";
+      document.getElementById("editVenueUrl").value = store.url || "";
       currentEditingStoreId = storeId;
     }
     editScreen.classList.add("activeAdmin");
@@ -304,6 +304,38 @@ function addNewVenue() {
         name.value = "";
         district.value = "";
         url.value = "";
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Kunde inte lägga till venue");
+      });
+  } catch (err) {
+    console.error(err);
+    alert("Kunde inte lägga till venue");
+  }
+}
+
+function editVenue() {
+  const name = document.getElementById("editVenueName").value;
+  const district = document.getElementById("editVenueArea").value;
+  const url = document.getElementById("editVenueUrl").value;
+
+  try {
+    fetch("/edit-venue", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, district, url }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Kunde inte lägga till venue");
+        return res.json();
+      })
+      .then((data) => {
+        alert("Venue Redigerad!");
+        name.value = "";
+        district.value = "";
+        url.value = "";
+        loadVenues();
       })
       .catch((err) => {
         console.error(err);
