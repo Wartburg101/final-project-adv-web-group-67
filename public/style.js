@@ -26,9 +26,11 @@ function toggleLoginButton() {
   }
 }
 
-let adminScreen = document.getElementById("admin-edit-screen");
+let adminScreen = document.getElementById("admin-add-screen");
+let editScreen = document.getElementById("admin-edit-screen");
 let crossDownAdminButton = document.getElementById("crossDownAdminButton");
 let openAdminScreenButton = document.getElementById("addButton");
+let currentEditingStoreId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   const loginButton = document.getElementById("login-button");
@@ -109,11 +111,15 @@ function editStores() {
         editButton.onclick = (e) => {
           e.preventDefault();
           e.stopPropagation();
-          toggleEditScreen(item.dataset.id);
-          // Functionality to be added later
+          const storeId = item.dataset.id;
+          const title = item.querySelector(".venueTitle")?.textContent || "";
+          const area = item.querySelector(".venueArea")?.textContent || "";
+          const url = item.href || "";
+          toggleEditScreen(storeId, { id: storeId, name: title, district: area, url: url });
         };
         
-        item.appendChild(editButton);
+        const buttonContainer = item.querySelector(".venueButtonContainer");
+        buttonContainer.appendChild(editButton);
       }
     } else {
       // User is not logged in - remove button if it exists
@@ -124,11 +130,19 @@ function editStores() {
   });
 }
 
-function toggleEditScreen(storeId) {
-  // For now, just alert the store ID. In a real implementation, this would open an edit form.
-  alert("Edit store with ID: " + storeId);
-  
-
+function toggleEditScreen(storeId, store = null) {
+  if (editScreen.classList.contains("activeAdmin")) {
+    editScreen.classList.remove("activeAdmin");
+  } else {
+    if (store) {
+      // Populate form fields with venue data
+      document.getElementById("venueName").value = store.name || "";
+      document.getElementById("venueArea").value = store.district || "";
+      document.getElementById("venueUrl").value = store.url || "";
+      currentEditingStoreId = storeId;
+    }
+    editScreen.classList.add("activeAdmin");
+  }
 }
 
 function toggleAdminScreen() {
