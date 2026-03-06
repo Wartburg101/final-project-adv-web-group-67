@@ -98,10 +98,10 @@ document.addEventListener("DOMContentLoaded", () => {
 function editStores() {
   const user = JSON.parse(localStorage.getItem("user"));
   let venueItems = document.querySelectorAll(".venueItem");
-  
+
   venueItems.forEach((item) => {
     const existingButton = item.querySelector(".venueEditButton");
-    
+
     if (user) {
       // User is logged in as admin - add button if it doesn't exist
       if (!existingButton) {
@@ -115,9 +115,14 @@ function editStores() {
           const title = item.querySelector(".venueTitle")?.textContent || "";
           const area = item.querySelector(".venueArea")?.textContent || "";
           const url = item.href || "";
-          toggleEditScreen(storeId, { id: storeId, name: title, district: area, url: url });
+          toggleEditScreen(storeId, {
+            id: storeId,
+            name: title,
+            district: area,
+            url: url,
+          });
         };
-        
+
         const buttonContainer = item.querySelector(".venueButtonContainer");
         buttonContainer.appendChild(editButton);
       }
@@ -213,7 +218,7 @@ function renderStoresGrouped(stores) {
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(store);
   }
-  // Sort Unknown Area last, otherwise alphabetically
+  // Sort Unknown Area (N/A) last, otherwise alphabetically
   const keys = Array.from(groups.keys()).sort((a, b) => {
     if (a === "N/A") return 1;
     if (b === "N/A") return -1;
@@ -265,7 +270,6 @@ async function loadVenues() {
     const stores = await res.json();
     renderStoresGrouped(stores);
     editStores();
-    
   } catch (err) {
     console.error(err);
     list.innerHTML = `<p>Kunde inte ladda venues.</p>`;
