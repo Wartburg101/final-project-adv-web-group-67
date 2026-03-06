@@ -315,6 +315,32 @@ function addNewVenue() {
   }
 }
 
+function deleteVenue() {
+  const id = currentEditingStoreId;
+  try {    fetch("/delete-venue", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Kunde inte ta bort venue");
+        return res.json();
+      })
+      .then((data) => {
+        alert("Venue borttagen!");
+        toggleEditScreen(); // Close the edit screen
+        loadVenues();
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Kunde inte ta bort venue");
+      });
+  } catch (err) {
+    console.error(err);
+    alert("Kunde inte ta bort venue");
+  }
+}
+
 function editVenue() {
   const name = document.getElementById("editVenueName").value;
   const district = document.getElementById("editVenueArea").value;
@@ -322,9 +348,9 @@ function editVenue() {
 
   try {
     fetch("/edit-venue", {
-      method: "POST",
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, district, url }),
+      body: JSON.stringify({ id: currentEditingStoreId, name, district, url }),
     })
       .then((res) => {
         if (!res.ok) throw new Error("Kunde inte lägga till venue");
@@ -332,9 +358,10 @@ function editVenue() {
       })
       .then((data) => {
         alert("Venue Redigerad!");
-        name.value = "";
-        district.value = "";
-        url.value = "";
+        document.getElementById("editVenueName").value = "";
+        document.getElementById("editVenueArea").value = "";
+        document.getElementById("editVenueUrl").value = "";
+        toggleEditScreen(); // Close the edit screen
         loadVenues();
       })
       .catch((err) => {
