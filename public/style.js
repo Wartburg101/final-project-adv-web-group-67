@@ -1,11 +1,15 @@
 let sortButtonAlphabet = document.getElementById("sortButtonAlphabet");
 let sortButtonArea = document.getElementById("sortButtonArea");
 
+
+//Button is clicked to sort by Alphabet
 function toggleAlphabetButton() {
   sortButtonAlphabet.classList.add("active");
   sortButtonArea.classList.remove("active");
   loadVenues(); // stores alphabetically
 }
+
+//Button is clicked to sort by Area
 function toggleAreaButton() {
   sortButtonArea.classList.add("active");
   sortButtonAlphabet.classList.remove("active");
@@ -174,6 +178,7 @@ function firstLetter(name) {
   return s ? s[0].toUpperCase() : "#";
 }
 
+// Check if Alphabet mode is active, returns true if it is, false if Area mode is active
 function isAlphabetMode() {
   return sortButtonAlphabet?.classList.contains("active");
 }
@@ -186,6 +191,8 @@ function areaKey(district) {
 function sortStores(stores) {
   // Om Area är aktiv -> sortera på district, annars på name
   if (!isAlphabetMode()) {
+    //Creates a copy of the stores array and sorts it by district first, then by name if districts are the same.
+    // Uses localeCompare for proper Swedish sorting.
     return [...stores].sort((a, b) => {
       const d = (a.district || "").localeCompare(b.district || "", "sv", {
         sensitivity: "base",
@@ -197,20 +204,27 @@ function sortStores(stores) {
     });
   }
 
+  //Sorts alphabetically
   return [...stores].sort((a, b) =>
     (a.name || "").localeCompare(b.name || "", "sv", { sensitivity: "base" }),
   );
 }
 
 function renderStoresGrouped(stores) {
+  //Get the venueList element and clear it
   const list = document.getElementById("venueList");
   list.innerHTML = "";
 
+  //Retrieves a sorted copy of the stores array based on what sorting mode is activated
   const sorted = sortStores(stores);
 
+  //Groups the sorted stores, either by their first letter of the name or by district depending on mode.
+  //The groups are stored in a Map where the key is the letter or district and the value is an array of stores that belong to that group.
   const groups = new Map();
 
   for (const store of sorted) {
+    //If in Alphabet mode, use the first letter of the store name as the key, 
+    //otherwise use the district as the key (with "N/A" for stores without a district).
     const key = isAlphabetMode()
       ? firstLetter(store.name)
       : areaKey(store.district);
@@ -219,13 +233,17 @@ function renderStoresGrouped(stores) {
     groups.get(key).push(store);
   }
   // Sort Unknown Area (N/A) last, otherwise alphabetically
+  //The Map keys (letters or districts) are extracted into an array and sorted.
   const keys = Array.from(groups.keys()).sort((a, b) => {
     if (a === "N/A") return 1;
     if (b === "N/A") return -1;
     return a.localeCompare(b, "sv", { sensitivity: "base" });
   });
 
+  //Construct HTML out of the grouped stores.
   list.innerHTML = keys
+  // For each group key (letter or district), we create a section with a title and a grid of venue items.
+  // For each key, the function is run. 
     .map((key) => {
       const itemsHtml = groups
         .get(key)
@@ -260,6 +278,8 @@ function renderStoresGrouped(stores) {
     .join("");
 }
 
+// Fetches the list of venues from the server and renders them on the page. 
+// Also sets up edit buttons if the user is an admin.
 async function loadVenues() {
   const list = document.getElementById("venueList");
   const user = JSON.parse(localStorage.getItem("user"));
@@ -275,7 +295,8 @@ async function loadVenues() {
     list.innerHTML = `<p>Kunde inte ladda venues.</p>`;
   }
 }
-// Liten helper
+
+// Helper to fix potential special characters in the string
 function escapeHtml(str) {
   return String(str)
     .replaceAll("&", "&amp;")
