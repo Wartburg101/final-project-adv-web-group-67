@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const addButton = document.getElementById("addButton");
 
   async function attemptLogin(e) {
-    if (e) e.preventDefault();
+    
     const username = usernameInput.value;
     const password = passwordInput.value;
     try {
@@ -114,7 +114,7 @@ function editStores() {
         editButton.textContent = "Edit";
         editButton.onclick = (e) => {
           e.preventDefault();
-          e.stopPropagation();
+
           const storeId = item.dataset.id;
           const title = item.querySelector(".venueTitle")?.textContent || "";
           const area = item.querySelector(".venueArea")?.textContent || "";
@@ -172,7 +172,6 @@ function fixUrl(url) {
 }
 
 // update, sort by letters
-
 function firstLetter(name) {
   const s = (name || "").trim();
   return s ? s[0].toUpperCase() : "#";
@@ -225,10 +224,12 @@ function renderStoresGrouped(stores) {
   for (const store of sorted) {
     //If in Alphabet mode, use the first letter of the store name as the key, 
     //otherwise use the district as the key (with "N/A" for stores without a district).
+    //If alphabet mode is active, the first letter is extracted and used as key.
     const key = isAlphabetMode()
       ? firstLetter(store.name)
       : areaKey(store.district);
 
+    //Checks if the key already exists in the Map
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(store);
   }
@@ -241,17 +242,13 @@ function renderStoresGrouped(stores) {
   });
 
   //Construct HTML out of the grouped stores.
-  list.innerHTML = keys
   // For each group key (letter or district), we create a section with a title and a grid of venue items.
   // For each key, the function is run. 
-    .map((key) => {
-      const itemsHtml = groups
-        .get(key)
-        .map((store) => {
+  list.innerHTML = keys.map((key) => {
+      const itemsHtml = groups.get(key).map((store) => {
           const title = store.name ?? "Okänt företag";
           const area = store.district ?? "";
           const url = fixUrl(store.url);
-
           return `
             <a href="${escapeHtml(url)}" class="venueItem" data-id="${store.id ?? ""}" target="_blank">
               <div class="venueInfoContainer">
@@ -263,8 +260,7 @@ function renderStoresGrouped(stores) {
               </div>
             </a>
           `;
-        })
-        .join("");
+        }).join("");
 
       return `
         <section class="letter-section">  
@@ -274,16 +270,14 @@ function renderStoresGrouped(stores) {
           </div>
         </section>
       `;
-    })
-    .join("");
+    }).join("");
 }
 
 // Fetches the list of venues from the server and renders them on the page. 
 // Also sets up edit buttons if the user is an admin.
 async function loadVenues() {
   const list = document.getElementById("venueList");
-  const user = JSON.parse(localStorage.getItem("user"));
-
+  
   try {
     const res = await fetch("/stores"); // hämtar från server.js
     if (!res.ok) throw new Error("Kunde inte hämta /stores");
@@ -352,7 +346,6 @@ function deleteVenue() {
         return res.json();
       })
       .then((data) => {
-        alert("Venue borttagen!");
         toggleEditScreen(); // Close the edit screen
         loadVenues();
       })

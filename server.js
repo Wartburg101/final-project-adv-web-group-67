@@ -8,8 +8,8 @@ const port = 3000;
 const pool = new Pool({
   password: "12345",
   user: "postgres",
-  //host: "localhost",
-  host: "host.docker.internal",
+  host: "localhost",
+  //host: "host.docker.internal",
   port: 5432,
   database: "postgres",
 });
@@ -21,7 +21,7 @@ let highestId = 0;
 
 // Simple login (hard-coded credentials)
 app.post("/login", (req, res) => {
-  const { username, password } = req.body || {};
+  const { username, password } = req.body;
   // demo credentials
   const ADMIN_USER = { username: "admin", password: "admin" };
   if (username === ADMIN_USER.username && password === ADMIN_USER.password) {
@@ -31,7 +31,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/venues", async (req, res) => {
-  const { name, district, url } = req.body || {};
+  const { name, district, url } = req.body;
   highestId++;
   const id = highestId;
   try {
@@ -48,6 +48,8 @@ app.get("/stores", async (req, res) => {
     // Acquire a client from the pool and run the query
     const { rows } = await pool.query("SELECT * FROM stores");
     res.json(rows);
+    //Get the highest ID from the fetched stores
+    //Looks through the ID of all stores and saves the highest one
     highestId = rows.reduce((max, store) => Math.max(max, store.id), 0);
     console.log("Stores fetched successfully");
   } catch (err) {
@@ -60,7 +62,8 @@ app.delete("/delete-venue", async (req, res) => {
   const { id } = req.body || {};  
   try {
     const { rows } = await pool.query("DELETE FROM stores WHERE id = $1 RETURNING *", [id]);
-    res.json(rows[0]);
+    // always send a JSON response; if nothing was deleted send an empty object
+    res.json(rows[0] || {});
   } catch (err) {
     console.error("Error deleting venue:", err);
     res.status(500).json({ error: "Internal Server Error" });
@@ -68,10 +71,10 @@ app.delete("/delete-venue", async (req, res) => {
 });
 
 app.put("/edit-venue", async (req, res) => {
-  const { id, name, district, url } = req.body || {};
+  const { id, name, district, url } = req.body;
   try {
     const { rows } = await pool.query("UPDATE stores SET name = $1, district = $2, url = $3 WHERE id = $4 RETURNING *", [name, district, url, id]);
-    res.json(rows[0]);
+    res.json(rows[0] || {});
   } catch (err) {
     console.error("Error editing venue:", err);
     res.status(500).json({ error: "Internal Server Error" });
