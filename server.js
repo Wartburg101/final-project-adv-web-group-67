@@ -8,8 +8,8 @@ const port = 3000;
 const pool = new Pool({
   password: "12345",
   user: "postgres",
-  host: "localhost",
-  //host: "host.docker.internal",
+  //host: "localhost",
+  host: "host.docker.internal",
   port: 5432,
   database: "postgres",
 });
@@ -19,7 +19,7 @@ app.use(express.json());
 
 let highestId = 0;
 
-// Simple demo login (hard-coded credentials)
+// Simple login (hard-coded credentials)
 app.post("/login", (req, res) => {
   const { username, password } = req.body || {};
   // demo credentials

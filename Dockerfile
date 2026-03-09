@@ -2,10 +2,13 @@ FROM node:20-alpine
 
 WORKDIR /usr/src/app
 
+COPY package*.json ./
 
-COPY index.html /usr/share/nginx/html/
-COPY nginx.conf /etc/nginx/nginx.conf
+RUN npm install
 
-EXPOSE 80
+COPY . .
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 3000
+
+CMD ["node", "server.js"]
+
