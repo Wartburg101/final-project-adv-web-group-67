@@ -35,8 +35,8 @@ app.post("/venues", async (req, res) => {
   highestId++;
   const id = highestId;
   try {
-    const { rows } = await pool.query("INSERT INTO stores (id, name, district, url) VALUES ($1, $2, $3, $4) RETURNING *", [id, name, district, url]);
-    res.json(rows[0]);
+    const { rows } = await pool.query("INSERT INTO stores (id, name, district, url) VALUES ($1, $2, $3, $4)", [id, name, district, url]);
+    res.json({ success: true });
   } catch (err) {
     console.error("Error adding venue:", err);
     res.status(500).json({ error: "Internal Server Error" });
@@ -59,11 +59,11 @@ app.get("/stores", async (req, res) => {
 });
 
 app.delete("/delete-venue", async (req, res) => {
-  const { id } = req.body || {};  
+  const { id } = req.body || {};
   try {
-    const { rows } = await pool.query("DELETE FROM stores WHERE id = $1 RETURNING *", [id]);
+    await pool.query("DELETE FROM stores WHERE id = $1", [id]);
     // always send a JSON response; if nothing was deleted send an empty object
-    res.json(rows[0] || {});
+    res.json({ success: true });
   } catch (err) {
     console.error("Error deleting venue:", err);
     res.status(500).json({ error: "Internal Server Error" });
@@ -73,8 +73,8 @@ app.delete("/delete-venue", async (req, res) => {
 app.put("/edit-venue", async (req, res) => {
   const { id, name, district, url } = req.body;
   try {
-    const { rows } = await pool.query("UPDATE stores SET name = $1, district = $2, url = $3 WHERE id = $4 RETURNING *", [name, district, url, id]);
-    res.json(rows[0] || {});
+    await pool.query("UPDATE stores SET name = $1, district = $2, url = $3 WHERE id = $4", [name, district, url, id]);
+    res.json({ success: true });
   } catch (err) {
     console.error("Error editing venue:", err);
     res.status(500).json({ error: "Internal Server Error" });
