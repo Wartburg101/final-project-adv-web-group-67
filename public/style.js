@@ -118,11 +118,13 @@ function editStores() {
           const storeId = item.dataset.id;
           const title = item.querySelector(".venueTitle")?.textContent || "";
           const area = item.querySelector(".venueArea")?.textContent || "";
+          const category = item.querySelector(".venueCategory")?.textContent || "";
           const url = item.href || "";
           toggleEditScreen(storeId, {
             id: storeId,
             name: title,
             district: area,
+            category: category,
             url: url,
           });
         };
@@ -147,6 +149,7 @@ function toggleEditScreen(storeId, store = null) {
       // Populate form fields with venue data
       document.getElementById("editVenueName").value = store.name || "";
       document.getElementById("editVenueArea").value = store.district || "";
+      document.getElementById("editVenueCategory").value = store.category || "";
       document.getElementById("editVenueUrl").value = store.url || "";
       currentEditingStoreId = storeId;
     }
@@ -248,12 +251,14 @@ function renderStoresGrouped(stores) {
       const itemsHtml = groups.get(key).map((store) => {
           const title = store.name ?? "Okänt företag";
           const area = store.district ?? "";
+          const category = store.category ?? "";
           const url = fixUrl(store.url);
           return `
             <a href="${escapeHtml(url)}" class="venueItem" data-id="${store.id ?? ""}" target="_blank">
               <div class="venueInfoContainer">
                 <p class="venueTitle">${escapeHtml(title)}</p>
                 <p class="venueArea">${escapeHtml(area)}</p>
+                <p class="venueCategory">${escapeHtml(category)}</p>
               </div>
               <div class="venueButtonContainer">
                 <img src="./assets/images/arrow_right_alt.svg" alt="Öppna" />
@@ -305,13 +310,14 @@ loadVenues();
 function addNewVenue() {
   const name = document.getElementById("venueName").value;
   const district = document.getElementById("venueArea").value;
+  const category = document.getElementById("venueCategory").value;
   const url = document.getElementById("venueUrl").value;
 
   try {
     fetch("/venues", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, district, url }),
+      body: JSON.stringify({ name, district, category, url }),
     })
       .then((res) => {
         if (!res.ok) throw new Error("Kunde inte lägga till venue");
@@ -322,6 +328,7 @@ function addNewVenue() {
         loadVenues();
         name.value = "";
         district.value = "";
+        category.value = "";
         url.value = "";
       })
       .catch((err) => {
@@ -362,13 +369,14 @@ function deleteVenue() {
 function editVenue() {
   const name = document.getElementById("editVenueName").value;
   const district = document.getElementById("editVenueArea").value;
+  const category = document.getElementById("editVenueCategory").value;
   const url = document.getElementById("editVenueUrl").value;
 
   try {
     fetch("/edit-venue", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: currentEditingStoreId, name, district, url }),
+      body: JSON.stringify({ id: currentEditingStoreId, name, district, category, url }),
     })
       .then((res) => {
         if (!res.ok) throw new Error("Kunde inte lägga till venue");
@@ -378,6 +386,7 @@ function editVenue() {
         alert("Venue Redigerad!");
         document.getElementById("editVenueName").value = "";
         document.getElementById("editVenueArea").value = "";
+        document.getElementById("editVenueCategory").value = "";
         document.getElementById("editVenueUrl").value = "";
         toggleEditScreen(); // Close the edit screen
         loadVenues();

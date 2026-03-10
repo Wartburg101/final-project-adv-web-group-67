@@ -8,8 +8,8 @@ const port = 3000;
 const pool = new Pool({
   password: "12345",
   user: "postgres",
-  host: "localhost",
-  //host: "host.docker.internal",
+  //host: "localhost",
+  host: "host.docker.internal",
   port: 5432,
   database: "postgres",
 });
@@ -32,11 +32,11 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/venues", async (req, res) => {
-  const { name, district, url } = req.body;
+  const { name, district, url, category } = req.body;
   highestId++;
   const id = highestId;
   try {
-    const { rows } = await pool.query("INSERT INTO stores (id, name, district, url) VALUES ($1, $2, $3, $4)", [id, name, district, url]);
+    const { rows } = await pool.query("INSERT INTO stores (id, name, district, url, category) VALUES ($1, $2, $3, $4, $5)", [id, name, district, url, category]);
     res.json({ success: true });
   } catch (err) {
     console.error("Error adding venue:", err);
@@ -72,9 +72,9 @@ app.delete("/delete-venue", async (req, res) => {
 });
 
 app.put("/edit-venue", async (req, res) => {
-  const { id, name, district, url } = req.body;
+  const { id, name, district, url, category } = req.body;
   try {
-    await pool.query("UPDATE stores SET name = $1, district = $2, url = $3 WHERE id = $4", [name, district, url, id]);
+    await pool.query("UPDATE stores SET name = $1, district = $2, url = $3, category = $4 WHERE id = $5", [name, district, url, category, id]);
     res.json({ success: true });
   } catch (err) {
     console.error("Error editing venue:", err);

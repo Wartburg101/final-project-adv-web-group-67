@@ -13,7 +13,7 @@ async function connectDB() {
     await client.connect();
     console.log("Connected to database");
 
-    //await seedStores();
+    await seedStores();
   } catch (err) {
     console.error("Error connecting to database", err);
   }
@@ -26,17 +26,24 @@ async function seedStores() {
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL,
         url TEXT,
-        district TEXT
+        district TEXT,
+        category TEXT
       );
     `);
-    console.log("Table ready ✅");
+    // Add category column if it doesn't exist
+    await client.query(`
+      ALTER TABLE stores ADD COLUMN IF NOT EXISTS category TEXT;
+    `);
+    console.log("Table ready");
 
     const stores = JSON.parse(fs.readFileSync("./stores.json", "utf-8"));
+    // Clear existing data
+    await client.query("DELETE FROM stores");
     for (const store of stores) {
-      await client.query("INSERT INTO stores (name, url, district) VALUES ($1, $2, $3)", [store.name, store.url, store.district]);
+      await client.query("INSERT INTO stores (name, url, district, category) VALUES ($1, $2, $3, $4)", [store.name, store.url, store.district, store.category]);
     }
 
-    console.log("Stores inserted successfully 🚀");
+    console.log("Stores inserted successfully");
   } catch (err) {
     console.error("Error seeding stores:", err);
   }

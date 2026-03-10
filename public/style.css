@@ -452,6 +452,16 @@ h2 {
   text-decoration: none;
   color: #000000;
 }
+.venueArea {
+  font-family: "Acumin Pro Regular", sans-serif;
+  font-size: 0.9rem;
+  color: #666666;
+}
+.venueCategory {
+  font-family: "Acumin Pro Regular", sans-serif;
+  font-size: 0.9rem;
+  color: #666666;
+}
 .venueButtonContainer {
   display: flex;
   align-items: center;
