@@ -14,6 +14,7 @@ const pool = new Pool({
   database: "postgres",
 });
 
+//Public folder is used for static files (html, css, js)
 app.use(express.static("public"));
 app.use(express.json());
 
