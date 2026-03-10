@@ -8,8 +8,8 @@ const port = 3000;
 const pool = new Pool({
   password: "12345",
   user: "postgres",
-  //host: "localhost",
-  host: "host.docker.internal",
+  host: "localhost",
+  //host: "host.docker.internal",
   port: 5432,
   database: "postgres",
 });
